@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from pathlib import Path
 import math
 import pickle
@@ -139,3 +140,88 @@ def predict():
 
 if __name__ == "__main__":
     app.run(debug=True)
+=======
+from flask import Flask, render_template, request
+import joblib
+import pandas as pd
+from pathlib import Path
+
+# Fix compatibility issue with some older sklearn models
+from sklearn.compose import _column_transformer
+
+if not hasattr(_column_transformer, "_RemainderColsList"):
+    _column_transformer._RemainderColsList = type(
+        "_RemainderColsList",
+        (list,),
+        {}
+    )
+
+
+app = Flask(__name__)
+
+# Load the trained model
+MODEL_PATH = Path(__file__).resolve().parent / "model" / "final_housing_price_model.pkl"
+
+try:
+    MODEL_HOUSING = joblib.load(MODEL_PATH)
+except FileNotFoundError as exc:
+    raise RuntimeError(
+        f"Model file not found at {MODEL_PATH}. Include model/final_housing_price_model.pkl in the deployment."
+    ) from exc
+
+
+@app.route("/", methods=["GET", "POST"])
+def predict():
+
+    result = None
+    error = None
+
+    if request.method == "POST":
+
+        try:
+            # Get data from normal HTML form
+            age = request.form.get("Age")
+            annual_income = request.form.get("Annual_Income")
+            years_experience = request.form.get("Years_Experience")
+            education_level = request.form.get("Education_Level")
+            city = request.form.get("City")
+
+            # Check required fields
+            if not all([
+                age,
+                annual_income,
+                years_experience,
+                education_level,
+                city
+            ]):
+                error = "Please fill in all fields."
+
+            else:
+
+                # Create DataFrame for the model
+                input_data = pd.DataFrame([{
+                    "Age": float(age),
+                    "Annual_Income": float(annual_income),
+                    "Years_Experience": float(years_experience),
+                    "Education_Level": education_level,
+                    "City": city
+                }])
+
+                # Make prediction
+                prediction = MODEL_HOUSING.predict(input_data)
+
+                result = prediction[0]
+
+        except Exception as e:
+            error = str(e)
+
+    return render_template(
+        "index.html",
+        result=result,
+        error=error
+    )
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
+>>>>>>> 2998ac5 (Deploy housing price predictor)

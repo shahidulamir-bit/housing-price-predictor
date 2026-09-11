@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Housing Price Prediction</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f5f9;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 450px;
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            color: #222;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #777;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 18px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: #007bff;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .result {
+            margin-top: 25px;
+            padding: 18px;
+            background: #e8f7ee;
+            border-radius: 8px;
+            text-align: center;
+            color: #16803c;
+        }
+
+        .error {
+            margin-top: 25px;
+            padding: 15px;
+            background: #fde8e8;
+            border-radius: 8px;
+            text-align: center;
+            color: #c62828;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Housing Price Predictor</h1>
+
+        <p class="subtitle">
+            Enter your information to predict the housing price
+        </p>
+
+        <form action="/" method="POST">
+
+            <label for="Age">Age</label>
+            <input
+                type="number"
+                id="Age"
+                name="Age"
+                step="any"
+                placeholder="Enter age"
+                required
+            >
+
+            <label for="Annual_Income">Annual Income</label>
+            <input
+                type="number"
+                id="Annual_Income"
+                name="Annual_Income"
+                step="any"
+                placeholder="Enter annual income"
+                required
+            >
+
+            <label for="Years_Experience">Years Experience</label>
+            <input
+                type="number"
+                id="Years_Experience"
+                name="Years_Experience"
+                step="any"
+                placeholder="Enter years of experience"
+                required
+            >
+
+            <label for="Education_Level">Education Level</label>
+
+            <select id="Education_Level" name="Education_Level" required>
+                <option value="">Select education level</option>
+                <option value="High School">High School</option>
+                <option value="Bachelor's">Bachelor's</option>
+                <option value="Master's">Master's</option>
+                <option value="PhD">PhD</option>
+            </select>
+
+            <label for="City">City</label>
+
+            <input
+                type="text"
+                id="City"
+                name="City"
+                placeholder="Enter city"
+                required
+            >
+
+            <button type="submit">
+                Predict Housing Price
+            </button>
+
+        </form>
+
+        {% if result is not none %}
+        <div class="result">
+            <h3>Predicted Housing Price</h3>
+            <p>{{ result }}</p>
+        </div>
+        {% endif %}
+
+        {% if error %}
+        <div class="error">
+            <strong>Error:</strong>
+            <p>{{ error }}</p>
+        </div>
+        {% endif %}
+
+    </div>
+
+</body>
+
+</html>
